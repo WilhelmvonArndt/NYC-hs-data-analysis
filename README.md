@@ -57,14 +57,54 @@ Upon visual inspection, there appears to be no noticeable difference in achievem
 
 ![](graphs/11.png) ![](graphs/12.png)
 
-The achievement variable appears to follow a normal distribution. Consequently, an independent t-test is conducted to compare the achievement levels of small schools and big schools. The resulting p-value is approximately 0.06517. Since this p-value exceeds the significance threshold, we are unable to reject the null hypothesis. Therefore, based on the statistical analysis, it can be concluded that the size of the school does not have a significant impact on student achievement.
+The achievement variable appears to follow a normal distribution. Consequently, an independent t-test is conducted to compare the achievement levels of small schools and big schools. The resulting p-value is approximately 0.06517. Since this p-value exceeds the significance threshold, we are unable to reject the null hypothesis. Therefore, based on the statistical analysis, it can be concluded that the size of the school does not have a significant impact on student achievement. Code for this can be found in section V of the appendix.
 
 #### Developing a model that includes all factors to identify the most important school characteristics for a) sending students to HSPHS, and b) achieving high scores on objective measures of achievement.
 
+To develop a comprehensive model that incorporates all relevant factors, I first performed a dimension reduction step. The methodology used for this reduction is identical to that described in question 4. Although we have already analyzed the data extensively and identified potential correlations, it is essential to further confirm the presence of any correlations within the dataset. To achieve clarity, a correlation matrix was generated for the entire dataset, excluding the 'dbn' and 'name' columns. This analysis allows us to gain a holistic understanding of the data and validate any existing correlations.
+
+![](graphs/13.png)
+
+To analyze the data further, we proceed by calculating the eigenvalues of our 21x21 matrix. From this calculation, we obtain five distinct loadings that are of particular interest and warrant further examination for interpretability:
+
+![](graphs/14.png)
+
+And just as previously done, we now examine the seperate loadings:
 
 
-Summarize the findings to identify the school characteristics that appear most relevant in determining acceptance of their students to HSPHS.
+![](graphs/15.png) ![](graphs/16.png) ![](graphs/17.png) ![](graphs/18.png) ![](graphs/19.png)
+
+Due to the high dimensionality of the data, it becomes challenging to comprehend the specific representation of each loading. To address this issue, a decision was made to construct two distinct unsupervised models using random forests. One model focuses on predicting the likelihood of students being accepted into HSPHS, while the other model aims to predict high scores on objective measures of achievement.
+
+Both models were trained using separate training and test datasets, maintaining the same proportions of 80% for training and 20% for testing. This approach allows us to effectively determine and explain the feature importance for each dependent variable in their respective models.
+
+![](graphs/20.png)
+![](graphs/21.png)
+
+During the model-building process, it was observed that varying the n_estimator parameter (number of trees) within the range of 100 to 1000 did not significantly affect the results. Therefore, for the sake of improved computational efficiency, the models were run with an n_estimator value of 100. Despite this adjustment, the interpretation of the models remains consistent, as the outcomes are evidently clear.
+
+The first model underscores the importance of a supportive environment in driving student achievement, reaffirming our initial expectations. On the other hand, the second model emphasizes that raw application numbers hold the highest significance when attempting to predict the number of accepted students into HSPHS. These findings further support our understanding of the influential factors within the models and provide valuable insights for future analysis.
+
+There are numerous insights to highlight in this analysis, emphasizing the complexity of real-world data. It is essential to acknowledge that if there were simple solutions, the issues at hand would not require extensive resolution efforts. That said, the various analyses conducted reveal significant findings.
+
+Firstly, it has been consistently demonstrated that reading scores exceeding expectations play a crucial role as an indicator of student success. Additionally, the social environment surrounding students emerges as a paramount factor. The presence of a supportive environment is a key determinant of success, indicating that student well-being and engagement hold greater importance than solely relying on material resources.
+
+While the availability of resources remains important, it is not the primary driver of student achievement. Notably, one of the most significant findings relates to smaller classroom sizes, suggesting that this factor intuitively provides more one-on-one time between teachers and students. Consequently, this improved teacher-student interaction contributes to fostering a supportive environment.
+
+Overall, these findings underscore the intricate nature of the data and the multifaceted factors that contribute to student success. By focusing on student well-being, creating supportive environments, and optimizing classroom sizes, it is possible to cultivate an environment conducive to positive educational outcomes. All the code can be found in section IV of the appendix.
+
+#### Summarize the findings to identify the school characteristics that appear most relevant in determining acceptance of their students to HSPHS.
 Provide actionable recommendations to the New York City Department of Education on how to improve schools in terms of a) increasing the number of students sent to HSPHS, and b) enhancing objective measures of achievement.
+
+a) The findings from our analysis, including linear regression and modeling, highlight the significant importance of the number of applications to highly selective public high schools (HSPHS) in determining acceptance. While it may seem obvious that applying is a prerequisite for acceptance, the prestigious nature of HSPHS schools can create barriers and discourage students from even considering applying. Therefore, creating a supportive environment that encourages and motivates students to pursue admission to HSPHS is crucial. This can be achieved through increased encouragement and guidance from teachers and the school community, fostering a culture that promotes aspirations towards HSPHS education. By instilling confidence and providing necessary support, students are more likely to apply, ultimately increasing their chances of acceptance.
+
+b) In order to enhance objective measures of achievement, it is vital to prioritize the hiring of passionate and dedicated teachers. While allocating resources for school renovations and providing necessary materials is essential, the teacher-student relationship lies at the core of effective education. Going beyond surface-level improvements, it is crucial to explore ways to incentivize individuals to pursue teaching careers and create an environment that fosters their professional growth. This may involve revisiting the compensation structure, professional development opportunities, and support systems within the educational system. By attracting and retaining passionate teachers, schools can offer students valuable one-on-one interactions and build strong relationships that contribute to their overall success.
+
+Additionally, focusing on early reading instruction can have a significant impact on students' long-term achievements. By nurturing a genuine interest in reading from an early age, students are more likely to develop strong literacy skills and a lifelong love for learning. Implementing effective reading programs and providing necessary resources and support for early literacy education can pave the way for improved academic performance and future success.
+
+To summarize, actionable recommendations to the New York City Department of Education include fostering a supportive environment that encourages students to apply to HSPHS, hiring passionate teachers, providing opportunities for 1:1 interactions, prioritizing early reading instruction, and addressing systemic factors to attract and retain dedicated educators. By implementing these strategies, schools can enhance both the number of students sent to HSPHS and objective measures of achievement, ultimately creating a more successful educational system.
+
+## Code Appendix
 
 #### I
 ```python
@@ -266,5 +306,191 @@ anova_table2 = sm.stats.anova_lm(model1, typ=2)
 print(anova_table2)
 
 #We find something more intersting here, teachers combined with trust aswell as trust reading scores exceed is important on student achievement.
+
+```
+#### V
+```python
+
+#null hypothesis: There is no different in student performance wether the in a smaller or bigger SCHOOL
+
+
+sizeTotal = data['school_size']
+achievementTotal = data['student_achievement']
+
+sizeAchievementSS = (pd.concat([sizeTotal,achievementTotal],axis=1)).dropna() #drops na's no charters
+
+medianSSize = sizeAchievementSS['school_size'].median() #gives us the media which will be used to sort big/small class
+#545.0
+
+
+sizeAchievementSize = (sizeAchievementSS.sort_values(by = 'school_size') ).reset_index(drop=True)
+
+achievementBSize = sizeAchievementSize.iloc[:272,:] #slicing
+achievementSSize = sizeAchievementSize.iloc[273:,:] 
+
+u2,p2 = stats.mannwhitneyu(achievementSSize['student_achievement'],achievementBSize['student_achievement'])
+
+#Significant => Difference between performance depending on the school size
+
+sizeschool_achievement_corr = data['school_size'].corr(data['student_achievement'])
+#low correlation
+
+stats.ttest_rel(achievementBSize['student_achievement'],achievementSSize['student_achievement'])
+#Shows that there's no significant difference between the both
+```
+
+#### VI
+```python
+#Building our model
+#importing libraries needed for unsupervised models.
+from sklearn.decomposition import PCA
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.ensemble import RandomForestRegressor
+from sklearn import metrics
+
+nonanData = data.dropna()
+
+
+yOutcomes = (nonanData['student_achievement']).to_numpy()
+predictors = nonanData
+predictors = (predictors.drop(['dbn','school_name'],axis=1)) #drop student_achievement later! 'applications','acceptances'
+
+predictors, testSet = train_test_split(predictors, test_size=0.2) #split between training and test set
+
+yOutcomes = (predictors['student_achievement']).to_numpy()
+yOutcomesTraining = (testSet['student_achievement']).to_numpy()
+
+predictors = (predictors.drop(['student_achievement'],axis=1))
+testSet = (testSet.drop(['student_achievement'],axis=1)).to_numpy()
+predictorsNames = list(predictors.columns.values)
+predictors = predictors.to_numpy()
+
+#amnipulating the testSet
+
+pcaTest = PCA()
+pcaTest.fit(testSet)
+
+eigValues1 = pcaTest.explained_variance_ 
+loadings1 = pcaTest.components_ # sorted by explained_variance_
+coordinatesTestData = pcaTest.fit_transform(testSet)
+
+XTest = np.transpose(np.array([coordinatesTestData[:,0],coordinatesTestData[:,1],coordinatesTestData[:,2],coordinatesTestData[:,3]]))
+
+r = np.corrcoef(predictors,rowvar=False)
+plt.imshow(r) 
+plt.colorbar()
+
+#Now we run a PCA
+
+pca1 = PCA()
+pca1.fit(predictors)
+
+eigValues = pca1.explained_variance_ 
+loadings = pca1.components_ # sorted by explained_variance_
+origDataNewCoordinates = pca1.fit_transform(predictors)
+
+#%%
+#Creating and plotting Screeplot after normalizing our data
+
+numPredictors = 21 #19
+zscoredData = stats.zscore(predictors)
+pca1.fit(zscoredData)
+eigValues = pca1.explained_variance_ 
+loadings = pca1.components_
+origDataNewCoordinates = pca1.fit_transform(zscoredData)
+
+plt.bar(np.linspace(1,numPredictors,numPredictors),eigValues)
+plt.title('Scree plot')
+plt.xlabel('Principal Components')
+plt.ylabel('Eigenvalues')
+plt.axhline(y = 1, color = 'r')
+
+# Four meaningful predictors for student achievement
+
+#Loadings for column 1
+plt.bar(np.linspace(1,21,21),loadings[:,0])
+plt.xlabel('Question')
+plt.ylabel('Loading')
+plt.title("Question and Loadings #1 ")
+
+#Black percentage, white percentage, strong family community ties.
+
+plt.bar(np.linspace(1,21,21),loadings[:,1])
+plt.xlabel('Question')
+plt.ylabel('Loading')
+plt.title("Question and Loadings #2 ")
+
+# Collaborative teachers HUGE - this is good teaching, we have the next value as rigorous instruction (~-0.9)
+
+plt.bar(np.linspace(1,21,21),loadings[:,2])
+plt.xlabel('Question')
+plt.ylabel('Loading')
+plt.title("Question and Loadings #3 ")
+
+# Hispanic is huge(~0.8), reading comes in second (~0.4 )
+
+plt.bar(np.linspace(1,21,21),loadings[:,3])
+plt.xlabel('Question')
+plt.ylabel('Loading')
+plt.title("Question and Loadings #4 ")
+
+#asian and black both have ~ 0.5
+#%%
+plt.bar(np.linspace(1,21,21),loadings[:,4])
+plt.xlabel('Question')
+plt.ylabel('Loading')
+plt.title("Question and Loadings #5 ")
+
+
+#model for predicting student achievement
+
+y = (nonanData['student_achievement'])
+X = nonanData
+X = (X.drop(['dbn','school_name','student_achievement'],axis=1)) #drop student_achievement later!
+
+xTrain, xTest, yTrain, yTest = train_test_split(X,y, test_size=0.2) #split between training and test set
+
+scaler = StandardScaler() #Scaling the different columns as the measured units differ from col to col.
+xTrain = scaler.fit_transform(xTrain)
+xTest = scaler.fit_transform(xTest)
+
+#Training the model
+
+regrM = RandomForestRegressor(n_estimators=100,random_state = 200)
+regrM.fit(xTrain, yTrain)
+print(regrM.feature_importances_)
+plt.barh(X.columns, regrM.feature_importances_)
+plt.title('Model 1: Feature importance on student achievement')
+
+yPred = regrM.predict(xTest)
+
+print('Mean Absolute Error:', metrics.mean_absolute_error(yTest, yPred))
+print('Mean Squared Error:', metrics.mean_squared_error(yTest, yPred))
+print('Root Mean Squared Error:', np.sqrt(metrics.mean_squared_error(yTest, yPred)))
+
+#Model predicting sending students to HSPHS
+
+
+y = (nonanData['acceptances']) #using this as this was proven to be a better predictor earlier in OLS
+X = nonanData
+X = (X.drop(['dbn','school_name','acceptances'],axis=1)) #drop student_achievement later! 'applications'
+
+xTrain, xTest, yTrain, yTest = train_test_split(X,y, test_size=0.2) #split between training and test set
+
+scaler = StandardScaler() #Scaling the different columns as the measured units differ from col to col.
+xTrain = scaler.fit_transform(xTrain)
+xTest = scaler.fit_transform(xTest)
+
+#Training the model
+
+regrM = RandomForestRegressor(n_estimators=40,random_state = 20)
+regrM.fit(xTrain, yTrain)
+print(regrM.feature_importances_)
+plt.barh(X.columns, regrM.feature_importances_)
+plt.title('Model 2: Feature importance on HSPHS acceptance')
+
+
+#Acceptances play a huge roll, it skews our model
 
 ```
