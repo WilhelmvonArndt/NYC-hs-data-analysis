@@ -1,24 +1,21 @@
 # NYC Elementary School Data Analysis
-
 The following project was created as a final submission to Pascal Wallisch class *Intro to Data Science*.
+<br>
 
 
 In this project our primary focus revolves around examining whether specific characteristics associated with middle schools in NYC can serve as predictors for admission to one of the eight highly selective public high schools in the city, collectively known as HSPHS. It is important to highlight that admission to these esteemed schools necessitates not only the submission of an application but also achieving a high score on the Specialized High Schools Admissions Test (SHSAT), which is an externally developed and anonymously evaluated standardized test. Through this project, we aim to uncover valuable insights and explore the factors that may influence the admission process to these exceptional educational institutions.
-
+<br>
 #### Managing missing data
 
 Due to imperfect data, I'll employ methods to address missing data in this project. NaN removal will be applied to necessary rows (schools) without removing all rows with >=1 nan, as our aim is to retain as much data as possible. Throughout the project, you'll observe the concatenation of smaller dataframes from the original data and the implementation of the nan-removal method on these subsets. For instance, when correlating column A with B in a dataset containing NaNs in columns A, B, and C, we'll group A and B before performing the action solely on those columns. This approach preserves rows where column C contains NaNs, rather than excluding them based on perfect data. Additionally, I utilize the nanRemover function for Numpy arrays, which is defined under section I of the appendix.
-
+<br>
 
 #### Determine which is a better predictor of admission to HSPHS: the raw number of applications or the application rate.
 
 To ensure accurate analysis, schools with zero applicants were excluded from the calculation. This step was taken to avoid ambiguity, as schools with zero acceptances but non-zero applications may erroneously be considered similar to those with both zero applications and acceptances. Subsequently, two linear regression models were employed to predict admissions (Y) using the number of raw applications (x) and the application ratio (x) as predictors. The results revealed that raw applications proved to be a superior predictor, with a coefficient of determination (R^2) of 0.655 (represented by the blue line), compared to a coefficient of 0.440 for the application-rate model (represented by the red line). This suggests that the number of raw applications provides more meaningful insights in predicting admissions outcomes. Code can be found under II in the apendix.
 
 ![](graphs/1.png) ![](graphs/2.png)
-
-#### Analyzing which school has the best per student odds of sending someone to HSPHS.
-
-The ratio was calculated by examining the acceptances/school size ratio. The school with the highest per student odds HSPHS was Christa McAuliffe School with odds of 3.26 to 1 for sending someone to HSPHS. Code can be found under seciton III in the apendix.
+<br>
 
 
 #### Investigating the relationship between students' perception of their school (as reported in columns L-Q) and the school's performance on objective measures of achievement (as noted in columns V-X).
@@ -43,7 +40,7 @@ The results of our model regarding the interaction effects were not particularly
 
 ![](graphs/9.png)
 
-Upon analyzing the results, it becomes apparent that the significance of 'reading scores exceed' is greater than initially anticipated. Furthermore, the importance of 'trust' is confirmed as a significant factor. Additionally, an intriguing interaction effect emerges between 'collaborative teachers' and 'trust'. Based on these findings, it can be concluded that there is indeed a relationship between student perception and the measured variables. Although the strength of this relationship may not be as pronounced as the importance of reading scores, it is evident that perception does play a significant role. Code for this can be found in section IV of the appendix.
+Upon analyzing the results, it becomes apparent that the significance of 'reading scores exceed' is greater than initially anticipated. Furthermore, the importance of 'trust' is confirmed as a significant factor. Additionally, an intriguing interaction effect emerges between 'collaborative teachers' and 'trust'. Based on these findings, it can be concluded that there is indeed a relationship between student perception and the measured variables. Although the strength of this relationship may not be as pronounced as the importance of reading scores, it is evident that perception does play a significant role. Code for this can be found in section III of the appendix.
 
 
 
@@ -57,7 +54,8 @@ Upon visual inspection, there appears to be no noticeable difference in achievem
 
 ![](graphs/11.png) ![](graphs/12.png)
 
-The achievement variable appears to follow a normal distribution. Consequently, an independent t-test is conducted to compare the achievement levels of small schools and big schools. The resulting p-value is approximately 0.06517. Since this p-value exceeds the significance threshold, we are unable to reject the null hypothesis. Therefore, based on the statistical analysis, it can be concluded that the size of the school does not have a significant impact on student achievement. Code for this can be found in section V of the appendix.
+The achievement variable appears to follow a normal distribution. Consequently, an independent t-test is conducted to compare the achievement levels of small schools and big schools. The resulting p-value is approximately 0.06517. Since this p-value exceeds the significance threshold, we are unable to reject the null hypothesis. Therefore, based on the statistical analysis, it can be concluded that the size of the school does not have a significant impact on student achievement. Code for this can be found in section IV of the appendix.
+<br>
 
 #### Developing a model that includes all factors to identify the most important school characteristics for a) sending students to HSPHS, and b) achieving high scores on objective measures of achievement.
 
@@ -91,7 +89,8 @@ Firstly, it has been consistently demonstrated that reading scores exceeding exp
 
 While the availability of resources remains important, it is not the primary driver of student achievement. Notably, one of the most significant findings relates to smaller classroom sizes, suggesting that this factor intuitively provides more one-on-one time between teachers and students. Consequently, this improved teacher-student interaction contributes to fostering a supportive environment.
 
-Overall, these findings underscore the intricate nature of the data and the multifaceted factors that contribute to student success. By focusing on student well-being, creating supportive environments, and optimizing classroom sizes, it is possible to cultivate an environment conducive to positive educational outcomes. All the code can be found in section IV of the appendix.
+Overall, these findings underscore the intricate nature of the data and the multifaceted factors that contribute to student success. By focusing on student well-being, creating supportive environments, and optimizing classroom sizes, it is possible to cultivate an environment conducive to positive educational outcomes. All the code can be found in section V of the appendix.
+<br>
 
 #### Summarize the findings to identify the school characteristics that appear most relevant in determining acceptance of their students to HSPHS.
 Provide actionable recommendations to the New York City Department of Education on how to improve schools in terms of a) increasing the number of students sent to HSPHS, and b) enhancing objective measures of achievement.
@@ -103,6 +102,7 @@ b) In order to enhance objective measures of achievement, it is vital to priorit
 Additionally, focusing on early reading instruction can have a significant impact on students' long-term achievements. By nurturing a genuine interest in reading from an early age, students are more likely to develop strong literacy skills and a lifelong love for learning. Implementing effective reading programs and providing necessary resources and support for early literacy education can pave the way for improved academic performance and future success.
 
 To summarize, actionable recommendations to the New York City Department of Education include fostering a supportive environment that encourages students to apply to HSPHS, hiring passionate teachers, providing opportunities for 1:1 interactions, prioritizing early reading instruction, and addressing systemic factors to attract and retain dedicated educators. By implementing these strategies, schools can enhance both the number of students sent to HSPHS and objective measures of achievement, ultimately creating a more successful educational system.
+<br>
 
 ## Code Appendix
 
@@ -188,18 +188,8 @@ predictionsRaw = modelRaw.predict(x_rawApp)
 
 
 ```
+
 #### III
-```python
-df_admission_rate = (data['acceptances']/data['school_size']).to_frame() #acceptances over school size gives us ratio
-df_admission_rate.columns = ['admission_rate']
-df_school_names = (data['school_name']).to_frame()
-df_admissionrate_schools = (pd.concat([df_school_names,df_admission_rate], join='outer',axis=1)).dropna()
-
-x=1/0.235
-y=x-1
-```
-
-#### IV
 ```python
 
 df_perception = data[data.columns[11:17]] #columns L-Q
@@ -308,7 +298,7 @@ print(anova_table2)
 #We find something more intersting here, teachers combined with trust aswell as trust reading scores exceed is important on student achievement.
 
 ```
-#### V
+#### IV
 ```python
 
 #null hypothesis: There is no different in student performance wether the in a smaller or bigger SCHOOL
@@ -339,7 +329,7 @@ stats.ttest_rel(achievementBSize['student_achievement'],achievementSSize['studen
 #Shows that there's no significant difference between the both
 ```
 
-#### VI
+#### V
 ```python
 #Building our model
 #importing libraries needed for unsupervised models.
