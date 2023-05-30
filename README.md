@@ -5,7 +5,8 @@ The following project was created as a final submission to Pascal Wallisch class
 
 In this project our primary focus revolves around examining whether specific characteristics associated with middle schools in NYC can serve as predictors for admission to one of the eight highly selective public high schools in the city, collectively known as HSPHS. It is important to highlight that admission to these esteemed schools necessitates not only the submission of an application but also achieving a high score on the Specialized High Schools Admissions Test (SHSAT), which is an externally developed and anonymously evaluated standardized test. Through this project, we aim to uncover valuable insights and explore the factors that may influence the admission process to these exceptional educational institutions.
 <br>
-#### Managing missing data
+
+## _Managing missing data_
 
 Due to imperfect data, I'll employ methods to address missing data in this project. NaN removal will be applied to necessary rows (schools) without removing all rows with >=1 nan, as our aim is to retain as much data as possible. Throughout the project, you'll observe the concatenation of smaller dataframes from the original data and the implementation of the nan-removal method on these subsets. For instance, when correlating column A with B in a dataset containing NaNs in columns A, B, and C, we'll group A and B before performing the action solely on those columns. This approach preserves rows where column C contains NaNs, rather than excluding them based on perfect data. Additionally, I utilize the nanRemover function for Numpy arrays, which is defined under section I of the appendix.
 <br>
