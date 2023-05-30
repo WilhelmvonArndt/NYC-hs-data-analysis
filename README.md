@@ -10,7 +10,7 @@ In this project our primary focus revolves around examining whether specific cha
 Due to imperfect data, I'll employ methods to address missing data in this project. NaN removal will be applied to necessary rows (schools) without removing all rows with >=1 nan, as our aim is to retain as much data as possible. Throughout the project, you'll observe the concatenation of smaller dataframes from the original data and the implementation of the nan-removal method on these subsets. For instance, when correlating column A with B in a dataset containing NaNs in columns A, B, and C, we'll group A and B before performing the action solely on those columns. This approach preserves rows where column C contains NaNs, rather than excluding them based on perfect data. Additionally, I utilize the nanRemover function for Numpy arrays, which is defined under section I of the appendix.
 <br>
 
-#### Determine which is a better predictor of admission to HSPHS: the raw number of applications or the application rate.
+## _Determine which is a better predictor of admission to HSPHS: the raw number of applications or the application rate._
 
 To ensure accurate analysis, schools with zero applicants were excluded from the calculation. This step was taken to avoid ambiguity, as schools with zero acceptances but non-zero applications may erroneously be considered similar to those with both zero applications and acceptances. Subsequently, two linear regression models were employed to predict admissions (Y) using the number of raw applications (x) and the application ratio (x) as predictors. The results revealed that raw applications proved to be a superior predictor, with a coefficient of determination (R^2) of 0.655 (represented by the blue line), compared to a coefficient of 0.440 for the application-rate model (represented by the red line). This suggests that the number of raw applications provides more meaningful insights in predicting admissions outcomes. Code can be found under II in the apendix.
 
@@ -18,7 +18,7 @@ To ensure accurate analysis, schools with zero applicants were excluded from the
 <br>
 
 
-#### Investigating the relationship between students' perception of their school (as reported in columns L-Q) and the school's performance on objective measures of achievement (as noted in columns V-X).
+## _Investigating the relationship between students' perception of their school (as reported in columns L-Q) and the school's performance on objective measures of achievement (as noted in columns V-X)._
 
 The first step to determining if there are any relationships worth investigating by plotting a correclation table:
 
@@ -44,7 +44,7 @@ Upon analyzing the results, it becomes apparent that the significance of 'readin
 
 
 
-#### Testing the hypothesis whether if size of the school impacts the student's achievement.  
+## _Testing the hypothesis whether if size of the school impacts the student's achievement._
 
 In this analysis, the school size is categorized into two groups, namely large and small, using the median as the dividing point. Subsequently, a scatter plot is generated to gain intuitive insights from the visual representation of the data.
 
@@ -57,7 +57,7 @@ Upon visual inspection, there appears to be no noticeable difference in achievem
 The achievement variable appears to follow a normal distribution. Consequently, an independent t-test is conducted to compare the achievement levels of small schools and big schools. The resulting p-value is approximately 0.06517. Since this p-value exceeds the significance threshold, we are unable to reject the null hypothesis. Therefore, based on the statistical analysis, it can be concluded that the size of the school does not have a significant impact on student achievement. Code for this can be found in section IV of the appendix.
 <br>
 
-#### Developing a model that includes all factors to identify the most important school characteristics for a) sending students to HSPHS, and b) achieving high scores on objective measures of achievement.
+## _Developing a model that includes all factors to identify the most important school characteristics for a) sending students to HSPHS, and b) achieving high scores on objective measures of achievement._
 
 To develop a comprehensive model that incorporates all relevant factors, I first performed a dimension reduction step. The methodology used for this reduction is identical to that described in question 4. Although we have already analyzed the data extensively and identified potential correlations, it is essential to further confirm the presence of any correlations within the dataset. To achieve clarity, a correlation matrix was generated for the entire dataset, excluding the 'dbn' and 'name' columns. This analysis allows us to gain a holistic understanding of the data and validate any existing correlations.
 
@@ -92,7 +92,7 @@ While the availability of resources remains important, it is not the primary dri
 Overall, these findings underscore the intricate nature of the data and the multifaceted factors that contribute to student success. By focusing on student well-being, creating supportive environments, and optimizing classroom sizes, it is possible to cultivate an environment conducive to positive educational outcomes. All the code can be found in section V of the appendix.
 <br>
 
-#### Summarize the findings to identify the school characteristics that appear most relevant in determining acceptance of their students to HSPHS.
+## _Summarize the findings to identify the school characteristics that appear most relevant in determining acceptance of their students to HSPHS_
 Provide actionable recommendations to the New York City Department of Education on how to improve schools in terms of a) increasing the number of students sent to HSPHS, and b) enhancing objective measures of achievement.
 
 a) The findings from our analysis, including linear regression and modeling, highlight the significant importance of the number of applications to highly selective public high schools (HSPHS) in determining acceptance. While it may seem obvious that applying is a prerequisite for acceptance, the prestigious nature of HSPHS schools can create barriers and discourage students from even considering applying. Therefore, creating a supportive environment that encourages and motivates students to pursue admission to HSPHS is crucial. This can be achieved through increased encouragement and guidance from teachers and the school community, fostering a culture that promotes aspirations towards HSPHS education. By instilling confidence and providing necessary support, students are more likely to apply, ultimately increasing their chances of acceptance.
@@ -104,7 +104,7 @@ Additionally, focusing on early reading instruction can have a significant impac
 To summarize, actionable recommendations to the New York City Department of Education include fostering a supportive environment that encourages students to apply to HSPHS, hiring passionate teachers, providing opportunities for 1:1 interactions, prioritizing early reading instruction, and addressing systemic factors to attract and retain dedicated educators. By implementing these strategies, schools can enhance both the number of students sent to HSPHS and objective measures of achievement, ultimately creating a more successful educational system.
 <br>
 
-## Code Appendix
+## _Code Appendix_
 
 #### I
 ```python
